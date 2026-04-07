@@ -1,412 +1,264 @@
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carbo - Shop & Resell Like Meesho</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-        body { font-family: 'Poppins', sans-serif; }
-		
-        /* HERO SLIDER */
-        .hero-slider {
-            position: relative;
-            height: 420px;
-            overflow: hidden;
-        }
-        .slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-        .slide.active {
-            opacity: 1;
-        }
-        .overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to right, rgba(,72,153,0.8), rgba(168,85,247,0.8));
-        }
-        .product-card { transition: all 0.3s; cursor: pointer; }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        #qrcode, #paymentQrcode, #cartQrcode { background: white; padding: 12px; border-radius: 12px; }
-        .category-link {
-            color: #4b5563;
-            padding-bottom: 0.25rem;
-            transition: color 0.2s ease, border-bottom 0.2s ease;
-        }
-        .category-link:hover { color: #ec4899; }
-        .category-link.active {
-            color: #ec4899 !important;
-            border-bottom: 2px solid #ec4899;
-        }
-        .cod-disabled { opacity: 0.5; pointer-events: none; background-color: #f3f4f6 !important; border-color: #d1d5db !important; }
-        .cod-note { font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem; text-align: center; }
-        .trust-badge { background: #f0fdf4; color: #166534; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 9999px; border: 1px solid #86efac; }
-        .similar-grid { display: flex; overflow-x: auto; gap: 1rem; padding-bottom: 1rem; scrollbar-width: thin; }
-        .similar-grid::-webkit-scrollbar { height: 6px; }
-        .similar-grid::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 9999px; }
-        .logo-container { width: 40px; height: 40px; border-radius: 16px; overflow: hidden; flex-shrink: 0; background: #f3f4f6; }
-        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Carousel styles for featured categories */
-        .cat-circle {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid #fce7f3;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: all 0.25s ease;
-        }
-        .cat-circle:hover {
-            transform: scale(1.1);
-            border-color: #ec4899;
-            box-shadow: 0 6px 16px rgba(236,72,153,0.3);
-        }
-        .cat-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .cat-scroll {
-            display: flex;
-            overflow-x: auto;
-            gap: 1.5rem;
-            padding: 1.5rem 0;
-            scrollbar-width: thin;
-        }
-        .cat-scroll::-webkit-scrollbar {
-            height: 6px;
-        }
-        .cat-scroll::-webkit-scrollbar-thumb {
-            background: #d1d5db;
-            border-radius: 9999px;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SMM Panel — Instagram / YouTube / Facebook</title>
+<style>
+body {
+ font-family: 'Poppins', Arial, sans-serif; background: linear-gradient(-45deg, #62cff4, #2c67f2, #004ff9, #fff94c);;min-height:100vh;overflow-x:hidden}
+h1{text-align:center;color:#fff;padding:20px 10px;text-shadow:1px 1px 3px rgba(0,0,0,.4)}
+.platform-box{background:#fff;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,.2);margin:20px auto;padding:20px;max-width:480px}
+.platform-title{display:flex;align-items:center;font-size:1.4em;font-weight:bold;margin-bottom:15px}
+.platform-title img{width:28px;height:28px;margin-right:10px}
+.service{display:flex;justify-content:space-between;align-items:center;background:#f9f9f9;border-radius:12px;padding:12px 16px;margin:8px 0;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.service span{font-size:1em;font-weight:500;color:#333}
+button{background:#0b84ff;color:#fff;border:none;border-radius:12px;padding:8px 14px;cursor:pointer;font-weight:600;transition:background .2s}
+button:hover{background:#0969c7}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;justify-content:center;align-items:center;z-index:1000}
+.modal-content{background:#fff;border-radius:16px;padding:20px;max-width:400px;width:90%;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center}
+.modal-content h2{margin-top:0;font-size:1.5em;color:#222}
+.input-field{margin:12px 0;text-align:center;width:100%}
+.input-field label{display:block;margin-bottom:6px;font-size:.9em;color:#444}
+.input-field input{width:80%;padding:10px;border-radius:10px;border:1px solid #ccc;text-align:left;margin-bottom:8px}
+.qr-code{margin:50px 0;display:flex;justify-content:center;width:100%}
+.close-btn{margin-top:15px;background:#ccc;color:#333}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;display:none}
+.payment-logos img{margin:0 5px;vertical-align:middle}
+.big-btn{background:#28a745;padding:12px 20px;font-size:1.2em;border:none;border-radius:12px;color:#fff;margin:10px 0;cursor:pointer;transition:background .2s}
+.big-btn:hover{background:#218838}
+#qrExpiredMsg{font-weight:bold;color:#f00;margin:10px 0;}
+#reloadQRBtn{background:#0b84ff;color:#fff;padding:10px 18px;border:none;border-radius:12px;cursor:pointer;margin:10px 0;transition:background .2s}
+#reloadQRBtn:hover{background:#0969c7}
+</style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
+<h1>best smm service provider</h1>
 
-    <!-- NAVBAR -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="logo-container">
-                    <img src="https://image2url.com/r2/default/images/1773746149025-ae387d75-7cb7-44d1-ba43-c8792cbf0ec0.webp" alt="Carbo Logo">
-                </div>
-                <h1 class="text-3xl font-bold text-pink-600 tracking-tighter">Meesho</h1>
-            </div>
-            <div class="flex-1 max-w-xl mx-8 hidden md:block">
-                <div class="relative">
-                    <input id="searchInput" type="text" placeholder="Search kurtis, sarees, jewellery..."
-                           class="w-full bg-gray-100 border border-gray-200 rounded-3xl py-3 px-6 text-sm focus:outline-none focus:border-pink-500">
-                    <i class="fa fa-search absolute right-5 top-3.5 text-gray-400"></i>
-                </div>
-            </div>
-            <div class="flex items-center gap-6 text-2xl">
-                <div onclick="toggleCart()" class="relative cursor-pointer">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span id="cartCount" class="absolute -top-2 -right-2 bg-pink-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">0</span>
-                </div>
-                <i class="fa fa-user-circle cursor-pointer"></i>
-            </div>
-        </div>
-    </nav>
+<div id="services"></div>
 
-    <!-- CATEGORIES -->
-    <div class="bg-white border-b sticky top-14 z-40 overflow-x-auto">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex gap-8 text-sm font-medium whitespace-nowrap">
-            <a href="#" onclick="filterCategory('all', this)" class="category-link active">All</a>
-            <a href="#" onclick="filterCategory('women', this)" class="category-link">Women Ethnic</a>
-            <a href="#" onclick="filterCategory('men', this)" class="category-link">Men</a>
-            <a href="#" onclick="filterCategory('kids', this)" class="category-link">Kids</a>
-            <a href="#" onclick="filterCategory('home', this)" class="category-link">Home & Kitchen</a>
-            <a href="#" onclick="filterCategory('beauty', this)" class="category-link">Beauty</a>
-        </div>
+<!-- Username Verification Modal -->
+<div class="modal" id="verifyModal">
+  <div class="modal-content">
+    <h2 id="verifyTitle">Verify</h2>
+    <div class="input-field">
+      <label id="verifyLabel" for="verifyInput"></label>
+      <input type="text" id="verifyInput" placeholder="">
     </div>
-
-    <!-- 🔥 HERO SLIDER -->
-<div class="hero-slider">
-
-    <!-- Slides -->
-    <div class="slide active" style="background-image:url('https://image2url.com/r2/default/images/1773750331454-372e1022-a9ee-49c9-8df0-ac1d064cea93.jpg')"></div>
-    
-
-    <!-- Overlay -->
-    <div class="overlay"></div>
-
-    <!-- Content -->
-    <div class="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
-        <h2 class="text-5xl font-bold mb-3">Shop • Resell • Earn</h2>
-        <p class="text-xl opacity-90">Just like Meesho but 100% static & UPI/COD only</p>
-        <button onclick="window.scrollTo({top: 700, behavior: 'smooth'})"
-            class="mt-8 bg-white text-pink-600 px-10 py-4 rounded-3xl font-semibold text-lg">
-            Start Shopping
-        </button>
-    </div>
-
+    <button onclick="verifyUser()">Verify</button>
+    <button class="close-btn" onclick="closeModal('verifyModal')">Cancel</button>
+  </div>
 </div>
 
-    <!-- TRUST BADGES -->
-    <div class="max-w-7xl mx-auto px-4 py-6">
-        <div class="bg-white rounded-2xl shadow-md p-5 border border-gray-100">
-            <div class="grid grid-cols-3 gap-4 text-center text-sm md:text-base font-medium">
-                <div class="flex flex-col items-center gap-2">
-                    <div class="text-3xl">♻️</div>
-                    <p class="text-green-700 font-semibold">7 Days Easy Return</p>
-                </div>
-                <div class="flex flex-col items-center gap-2 border-l border-r border-gray-200">
-                    <div class="text-3xl">💰</div>
-                    <p class="text-emerald-700 font-semibold">Cash on Delivery</p>
-                </div>
-                <div class="flex flex-col items-center gap-2">
-                    <div class="text-3xl">🏆</div>
-                    <p class="text-amber-700 font-semibold">Lowest Prices</p>
-                </div>
-            </div>
-        </div>
+<!-- QR Modal with More Payment App Icons -->
+<div class="modal" id="qrModal">
+  <div class="modal-content" style="max-width:400px;align-items:center;">
+    <h2>Scan to Pay via any UPI apps </h2>
+    <div class="payment-logos" style="margin:10px 0;">
+     <div class="payment-logos" style="margin:0px 0; display:flex; justify-content:center; flex-wrap:wrap; gap:8px;">
+  
+</div>
+
     </div>
 
-    <!-- FEATURED CATEGORIES CAROUSEL -->
-    <div class="max-w-7xl mx-auto px-4 py-8 bg-white rounded-2xl shadow-sm mb-8">
-        <div class="cat-scroll">
-            <div class="flex flex-col items-center text-center min-w-[110px]">
-                <div class="cat-circle">
-                    <img src="data:image/webp;base64,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" alt="Ethnic Wear">
-                </div>
-                <p class="mt-3 text-sm font-medium text-gray-800">Ethnic Wear</p>
-            </div>
-            <div class="flex flex-col items-center text-center min-w-[110px]">
-                <div class="cat-circle">
-                    <img src="https://images.unsplash.com/photo-1621184455862-c163dfb30e0f?w=300" alt="Western Dresses">
-                </div>
-                <p class="mt-3 text-sm font-medium text-gray-800">Western Dresses</p>
-            </div>
-            <div class="flex flex-col items-center text-center min-w-[110px]">
-                <div class="cat-circle">
-                    <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=300" alt="Menswear">
-                </div>
-                <p class="mt-3 text-sm font-medium text-gray-800">Menswear</p>
-            </div>
-            <div class="flex flex-col items-center text-center min-w-[110px]">
-                <div class="cat-circle">
-                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=300" alt="Footwear">
-                </div>
-                <p class="mt-3 text-sm font-medium text-gray-800">Footwear</p>
-            </div>
-            <div class="flex flex-col items-center text-center min-w-[110px]">
-                <div class="cat-circle">
-                    <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=300" alt="Home Decor">
-                </div>
-                <p class="mt-3 text-sm font-medium text-gray-800">Home Decor</p>
-            </div>
-          
-               
-                </div>
-            </div>
-        </div>
+    <div class="qr-code" style="margin:5px 0;">
+      <canvas id="qrcode" style="width:400px;height:400px;"></canvas>
+    </div>
+    <div id="amountDisplay" style="font-size:1.6em;font-weight:bold;margin:10px 0;"></div>
+    <div style="margin-bottom:15px;"></div>
+
+    <!-- Countdown -->
+    <div id="countdown" style="margin:10px 0;font-size:1.2em;color:#f00;"></div>
+
+    <!-- UTR Input -->
+    <div class="input-field" id="utrField">
+      <label for="utrInput">Enter your Payment UTR/TXN ID</label>
+      <input type="text" id="utrInput" placeholder="Enter full UTR">
     </div>
 
-    <!-- PRODUCTS GRID -->
-    <div class="max-w-7xl mx-auto px-4 py-10">
-        <h2 class="text-3xl font-semibold mb-8 flex items-center gap-3">
-            Trending Products
-            <span class="text-pink-600 text-sm font-normal">(Static Demo)</span>
-        </h2>
-        <div id="productsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
-    </div>
+    <!-- Big Green Payment Complete Button -->
+    <button class="big-btn" onclick="verifyUTR()" style="margin-top:10px;">✅ Payment Completed</button>
 
-    <!-- PRODUCT DETAIL MODAL -->
-    <div id="productDetailModal" class="hidden fixed inset-0 bg-white z-[200] overflow-y-auto">
-        <div class="max-w-5xl mx-auto px-4 py-8">
-            <div class="flex justify-between items-center mb-8 sticky top-0 bg-white z-10 pb-4 border-b">
-                <button onclick="closeProductDetail()" class="text-3xl text-gray-700 hover:text-black">
-                    <i class="fa fa-arrow-left"></i>
-                </button>
-                <h2 class="text-2xl font-bold">Product Details</h2>
-                <div></div>
-            </div>
-            <div id="productDetailContent"></div>
-            <div class="mt-12">
-                <h3 class="text-2xl font-bold mb-6">Similar Products</h3>
-                <div id="similarProducts" class="similar-grid"></div>
-            </div>
-        </div>
-    </div>
+    <div id="qrExpiredMsg" style="display:none;font-weight:bold;color:#f00;margin:10px 0;">⚠️ QR expired, please reload</div>
+    <button id="reloadQRBtn" style="display:none;">🔁 Reload QR Code</button>
+    <button class="close-btn" onclick="closeModal('qrModal')">Cancel</button>
+  </div>
+</div>
+<!-- Payment Not Completed Modal -->
+<div class="modal" id="paymentFailModal">
+  <div class="modal-content">
+    <h2>Payment not completed ❌</h2>
+    <p>Please try again.</p>
+    <button onclick="backToQR()">Back to QR</button>
+  </div>
+</div>
 
-    <script>
-        // ALL 15 PRODUCTS – fully restored
-        let products = [
-            { id:1, name:"Pink Floral Kurti with Mirror Work", price:299, original:599, category:"women",
-              img:"https://picsum.photos/id/1015/500/700",
-              description:"Soft cotton kurti with beautiful mirror embroidery. Comfortable for daily wear and festive occasions.",
-              rating:4.3, reviews:1284, supplier:"Verified Supplier • Jaipur", returnPolicy:"7 Days Return Available" },
-            { id:2, name:"Blue Georgette Saree with Blouse", price:449, original:999, category:"women",
-              img:"https://picsum.photos/id/201/500/700",
-              description:"Lightweight georgette saree with rich border work. Comes with matching blouse piece.",
-              rating:4.6, reviews:942, supplier:"Verified Supplier • Surat", returnPolicy:"7 Days Return Available" },
-            { id:3, name:"Men's Slim Fit Cotton Shirt", price:399, original:799, category:"men",
-              img:"https://picsum.photos/id/29/500/700",
-              description:"Breathable cotton shirt, slim fit, wrinkle resistant. Perfect for office and casual.",
-              rating:4.1, reviews:673, supplier:"Verified Supplier • Tirupur", returnPolicy:"7 Days Return Available" },
-            { id:4, name:"Kids Party Wear Frock", price:249, original:499, category:"kids",
-              img:"https://picsum.photos/id/64/500/700",
-              description:"Cute party frock with net layering and embroidery. Comfortable lining.",
-              rating:4.4, reviews:451, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" },
-            { id:5, name:"Stainless Steel Cookware Set (3 pcs)", price:599, original:1299, category:"home",
-              img:"https://picsum.photos/id/160/500/700",
-              description:"High quality stainless steel kadhai, tawa & spoon set. Induction compatible.",
-              rating:4.5, reviews:812, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" },
-            { id:6, name:"Gold Plated Layered Necklace Set", price:199, original:499, category:"women",
-              img:"https://picsum.photos/id/201/500/700",
-              description:"Trendy gold plated necklace with earrings. Long lasting shine.",
-              rating:4.0, reviews:389, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" },
-            { id:7, name:"Matte Lipstick Set (5 Shades)", price:149, original:399, category:"beauty",
-              img:"https://picsum.photos/id/251/500/700",
-              description:"Long lasting matte lipsticks. Hydrating formula, smudge proof.",
-              rating:4.2, reviews:1567, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" },
-            { id:8, name:"Men's Stretchable Slim Jeans", price:549, original:1199, category:"men",
-              img:"https://picsum.photos/id/29/500/700",
-              description:"Comfort stretch denim jeans. Skinny fit, durable stitching.",
-              rating:4.3, reviews:934, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" },
-            { id:9, name:"Leheriya Bandhej Saree", price:699, original:1499, category:"women",
-              img:"https://picsum.photos/id/1020/500/700",
-              description:"Traditional Rajasthani leheriya bandhej saree. Pure georgette.",
-              rating:4.7, reviews:521, supplier:"Verified Supplier • Jaipur", returnPolicy:"7 Days Return Available" },
-            { id:10, name:"Jaipuri Razai / Quilt (Double Bed)", price:899, original:1999, category:"home",
-              img:"https://picsum.photos/id/1060/500/700",
-              description:"Handmade Jaipuri razai. Soft cotton filling, beautiful print.",
-              rating:4.6, reviews:678, supplier:"Verified Supplier • Jaipur", returnPolicy:"7 Days Return Available" },
-            { id:11, name:"Cotton Handblock Printed Kurta for Men", price:459, original:899, category:"men",
-              img:"https://picsum.photos/id/1080/500/700",
-              description:"Traditional handblock print kurta. Pure cotton, breathable.",
-              rating:4.4, reviews:312, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" },
-            { id:12, name:"Kundan Jhumka Earrings", price:249, original:599, category:"women",
-              img:"https://picsum.photos/id/1045/500/700",
-              description:"Beautiful kundan work jhumkas. Lightweight and elegant.",
-              rating:4.5, reviews:789, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" },
-            { id:13, name:"Kids Ethnic Sherwani Set", price:599, original:1199, category:"kids",
-              img:"https://picsum.photos/id/65/500/700",
-              description:"Festive sherwani set for kids with turban.",
-              rating:4.3, reviews:245, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" },
-            { id:14, name:"Anarkali Suit with Dupatta", price:799, original:1599, category:"women",
-              img:"https://picsum.photos/id/1018/500/700",
-              description:"Stylish anarkali suit with dupatta. Flared and elegant.",
-              rating:4.6, reviews:1342, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" },
-            { id:15, name:"Non-Stick Kadhai Set (3 pcs)", price:649, original:1299, category:"home",
-              img:"https://picsum.photos/id/162/500/700",
-              description:"Durable non-stick cookware set. Easy to clean.",
-              rating:4.4, reviews:567, supplier:"Verified Supplier", returnPolicy:"7 Days Return Available" }
-        ];
+<!-- Payment Success Modal -->
+<div class="modal" id="paymentSuccessModal">
+  <div class="modal-content">
+    <h2>✅ Payment Verified!</h2>
+    <p id="successService"></p>
+    <p id="successUserInput"></p>
+    <p>Your service will be provided soon!</p>
+    <button class="big-btn" onclick="closeModal('paymentSuccessModal')">OK</button>
+  </div>
+</div>
 
-        let cart = [];
+<div class="toast" id="toast">Verified successfully ✅</div>
 
-        // Render products
-        function renderProducts(filtered = products) {
-            const grid = document.getElementById("productsGrid");
-            grid.innerHTML = "";
-            filtered.forEach(p => {
-                const discount = Math.round(((p.original - p.price) / p.original) * 100);
-                const card = document.createElement("div");
-                card.className = "product-card bg-white rounded-3xl overflow-hidden shadow";
-                card.innerHTML = `
-                    <div class="relative">
-                        <img src="${p.img}" class="w-full h-64 object-cover">
-                        <span class="absolute top-3 right-3 bg-white text-pink-600 text-xs font-bold px-3 py-1 rounded-full shadow">${discount}% OFF</span>
-                    </div>
-                    <div class="p-4">
-                        <h4 class="font-medium text-sm line-clamp-2 h-10">${p.name}</h4>
-                        <div class="flex items-center gap-2 mt-2">
-                            <span class="text-xl font-bold">₹${p.price}</span>
-                            <span class="text-gray-400 line-through text-sm">₹${p.original}</span>
-                        </div>
-                        <div class="mt-2 flex items-center gap-1 text-sm text-yellow-500">
-                            <i class="fa fa-star"></i> ${p.rating}
-                        </div>
-                    </div>
-                `;
-                // IMPORTANT: This line makes the card clickable
-                card.addEventListener('click', () => openProductDetail(p.id));
-                grid.appendChild(card);
-            });
-        }
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script>
+const UPI_ID = 'bestsmmhg@naviaxis';
+const MERCHANT_NAME = 'Social Media Booster';
+// Multiple valid UTR prefixes
+const UTR_PREFIXES = ["FMPI","ok","T","UTR","utr"];
 
-        // Open product detail
-        function openProductDetail(id) {
-            const p = products.find(x => x.id === id);
-            if (!p) return alert("Product not found");
+const SERVICES = [
+  {platform:'Instagram',icon:'https://cdn-icons-png.flaticon.com/512/174/174855.png',items:[
+    {name:'Instagram 1k Followers',price:12,verifyField:{label:'Enter Instagram username',placeholder:'@username'}},
+    {name:'Instagram 10k Followers',price:89,verifyField:{label:'Enter Instagram username',placeholder:'@username'}},
+	 {name:'Instagram Permanent blue tick ☑️',price:109,verifyField:{label:'Enter Instagram username',placeholder:'@username'}},
+    {name:'Instagram 5k Likes',price:21,verifyField:{label:'Enter Post/Reel link',placeholder:'Paste link here'}},
+    {name:'Instagram 10k Reels Views',price:42,verifyField:{label:'Enter Reel link',placeholder:'Paste reel link'}}
+  ]},
+  {platform:'YouTube',icon:'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',items:[
+    {name:'YouTube 1k Subscribers',price:51,verifyField:{label:'Enter Channel name',placeholder:'Channel name'}},
+    {name:'YouTube 10k Subscribers',price:499,verifyField:{label:'Enter Channel URL',placeholder:'Paste channel URL'}},
+    {name:'YouTube 5k Video Views',price:320,verifyField:{label:'Enter Video URL',placeholder:'Paste video link'}},
+    {name:'YouTube 10k Shorts Views',price:152,verifyField:{label:'Enter Shorts link',placeholder:'Paste shorts link'}},
+    {name:'YouTube 4000H Watchtime',price:999,verifyField:{label:'Enter Channel URL',placeholder:'Paste channel URL'}}
+  ]},
+  {platform:'Facebook',icon:'https://cdn-icons-png.flaticon.com/512/733/733547.png',items:[
+    {name:'Facebook 1k Followers',price:19,verifyField:{label:'Enter Facebook profile/page link',placeholder:'Paste profile or page link'}},
+    {name:'Facebook 10k Followers',price:189,verifyField:{label:'Enter Facebook page/profile link',placeholder:'Paste profile/page link'}},
+    {name:'Facebook 10k Reels Views',price:49,verifyField:{label:'Enter Reel link',placeholder:'Paste reel link'}},
+    {name:'Facebook 5k Reels Likes',price:29,verifyField:{label:'Enter Reel link',placeholder:'Paste reel link'}}
+  ]}
+];
 
-            const content = document.getElementById("productDetailContent");
-            content.innerHTML = `
-                <div class="grid md:grid-cols-2 gap-10">
-                    <div>
-                        <img src="${p.img}" class="w-full rounded-2xl shadow-lg object-cover">
-                    </div>
-                    <div>
-                        <h1 class="text-3xl font-bold mb-4">${p.name}</h1>
-                        <div class="flex items-center gap-4 mb-6">
-                            <span class="text-4xl font-bold text-pink-600">₹${p.price}</span>
-                            <span class="text-xl text-gray-500 line-through">₹${p.original}</span>
-                            <span class="bg-pink-100 text-pink-700 px-4 py-1 rounded-full text-sm font-medium">${Math.round(((p.original - p.price)/p.original)*100)}% OFF</span>
-                        </div>
-                        <div class="flex flex-wrap gap-3 mb-8">
-                            <div class="trust-badge flex items-center gap-1"><i class="fa fa-sync"></i> ${p.returnPolicy}</div>
-                            <div class="trust-badge flex items-center gap-1"><i class="fa fa-check-circle"></i> ${p.supplier}</div>
-                            <div class="trust-badge flex items-center gap-1"><i class="fa fa-star"></i> ${p.rating} • ${p.reviews}+ Ratings</div>
-                        </div>
-                        <div class="mb-8">
-                            <h3 class="text-xl font-semibold mb-3">Description</h3>
-                            <p class="text-gray-700">${p.description}</p>
-                        </div>
-                        <div class="flex gap-4">
-                            <button class="flex-1 bg-pink-100 text-pink-700 py-4 rounded-2xl font-semibold">Add to Cart</button>
-                            <button class="flex-1 bg-pink-600 text-white py-4 rounded-2xl font-semibold">Buy Now</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+let currentService = null;
+let timerInterval;
 
-            // Similar products
-            const similar = products.filter(x => x.category === p.category && x.id !== id).slice(0,8);
-            document.getElementById("similarProducts").innerHTML = similar.map(s => `
-                <div class="min-w-[180px] bg-white rounded-xl overflow-hidden shadow cursor-pointer" onclick="openProductDetail(${s.id})">
-                    <img src="${s.img}" class="w-full h-56 object-cover">
-                    <div class="p-3">
-                        <p class="font-medium text-sm line-clamp-2">${s.name}</p>
-                        <p class="text-pink-600 font-bold mt-1">₹${s.price}</p>
-                        <p class="text-xs text-gray-500 line-through">₹${s.original}</p>
-                    </div>
-                </div>
-            `).join('');
+function renderServices(){
+  const container=document.getElementById('services');
+  SERVICES.forEach(group=>{
+    const box=document.createElement('div');
+    box.className='platform-box';
+    box.innerHTML=`<div class='platform-title'><img src="${group.icon}"/> ${group.platform}</div>`;
+    group.items.forEach(s=>{
+      const row=document.createElement('div');
+      row.className='service';
+      row.innerHTML=`<span>${s.name} — ₹${s.price}</span><button onclick='openVerify(${JSON.stringify(s)})'>Buy</button>`;
+      box.appendChild(row);
+    });
+    container.appendChild(box);
+  });
+}
 
-            document.getElementById("productDetailModal").classList.remove("hidden");
-            document.body.style.overflow = 'hidden'; // prevent background scroll
-        }
+function openVerify(service){
+  currentService=service;
+  document.getElementById('verifyTitle').innerText=`Verify ${service.name}`;
+  document.getElementById('verifyLabel').innerText=service.verifyField.label;
+  document.getElementById('verifyInput').placeholder=service.verifyField.placeholder;
+  document.getElementById('verifyInput').value='';
+  document.getElementById('verifyInput').focus();
+  document.getElementById('verifyModal').style.display='flex';
+}
 
-        function closeProductDetail() {
-            document.getElementById("productDetailModal").classList.add("hidden");
-            document.body.style.overflow = '';
-        }
+function closeModal(id){document.getElementById(id).style.display='none'}
 
-        // Category filter
-        function filterCategory(cat, el) {
-            document.querySelectorAll('.category-link').forEach(a => a.classList.remove('active'));
-            if (el) el.classList.add('active');
-            renderProducts(cat === 'all' ? products : products.filter(p => p.category === cat));
-        }
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.innerText=msg;t.style.display='block';
+  setTimeout(()=>{t.style.display='none'},2000);
+}
 
-        window.onload = function() {
-            renderProducts();
-            document.querySelector('.category-link')?.classList.add('active');
-        };
-    </script>
+function verifyUser(){
+  const input=document.getElementById('verifyInput').value.trim();
+  if(!input){alert('Please fill the required field');return;}
+  closeModal('verifyModal');
+  showToast('Verified successfully ✅');
+  setTimeout(openQR,500);
+}
+
+function openQR(){
+  const amount=currentService.price;
+  document.getElementById('amountDisplay').innerText = `Amount ₹${amount}`;
+  const upiUrl=`upi://pay?pa=${UPI_ID}&pn=${MERCHANT_NAME}&am=${amount}&cu=INR`;
+  const canvas = document.getElementById('qrcode');
+  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+  QRCode.toCanvas(canvas, upiUrl, {width:220, height:220}, err=>{if(err)console.error(err)});
+
+  document.getElementById('qrExpiredMsg').style.display='none';
+  document.getElementById('reloadQRBtn').style.display='none';
+  document.getElementById('qrcode').style.display='flex';
+  document.getElementById('utrInput').value='';
+
+  document.getElementById('qrModal').style.display='flex';
+  startCountdown(5*60);
+}
+
+function startCountdown(seconds){
+  clearInterval(timerInterval);
+  let remaining=seconds;
+  const countdownEl = document.getElementById('countdown');
+  countdownEl.innerText = formatTime(remaining);
+
+  timerInterval = setInterval(()=>{
+    remaining--;
+    countdownEl.innerText = formatTime(remaining);
+    if(remaining <= 0){
+      clearInterval(timerInterval);
+      countdownEl.innerText = '';
+      document.getElementById('qrcode').style.display='none';
+      document.getElementById('qrExpiredMsg').style.display='block';
+      document.getElementById('reloadQRBtn').style.display='inline-block';
+    }
+  },1000);
+}
+
+function formatTime(sec){
+  const m = String(Math.floor(sec/60)).padStart(2,'0');
+  const s = String(sec%60).padStart(2,'0');
+  return `⏱️ ${m}:${s}`;
+}
+
+document.getElementById('reloadQRBtn').onclick = function(){ openQR(); };
+
+function paymentNotCompleted(){
+  closeModal('qrModal');
+  document.getElementById('paymentFailModal').style.display='flex';
+}
+
+function backToQR(){
+  closeModal('paymentFailModal');
+  openQR();
+}
+
+// UTR verification with multiple prefixes
+function verifyUTR(){
+  const userUTR = document.getElementById('utrInput').value.trim().toUpperCase();
+  if(!userUTR){
+    alert('Please enter your UTR.');
+    return;
+  }
+
+  const firstFour = userUTR.substring(0,4);
+  if(UTR_PREFIXES.includes(firstFour)){
+    closeModal('qrModal'); // close QR modal
+
+    // Show success modal
+    document.getElementById('successService').innerText = `Service: ${currentService.name}`;
+    const userInput = document.getElementById('verifyInput').value.trim();
+    document.getElementById('successUserInput').innerText = `Your input: ${userInput}`;
+
+    document.getElementById('paymentSuccessModal').style.display='flex';
+  } else {
+    alert('Payment not completed ❌Wrong UTR');
+    document.getElementById('utrInput').value='';
+  }
+}
+
+renderServices();
+</script>
 </body>
 </html>
