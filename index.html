@@ -5,30 +5,177 @@
 <title>SMM Panel — Instagram / YouTube / Facebook</title>
 <style>
 body {
- font-family: 'Poppins', Arial, sans-serif; background: linear-gradient(-45deg, #62cff4, #2c67f2,#FF0000, #fff94c);;min-height:100vh;overflow-x:hidden}
-h1{text-align:center;color:#fff;padding:20px 10px;text-shadow:1px 1px 3px rgba(0,0,0,.4)}
-.platform-box{background:#fff;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,.2);margin:20px auto;padding:20px;max-width:480px}
-.platform-title{display:flex;align-items:center;font-size:1.4em;font-weight:bold;margin-bottom:15px}
-.platform-title img{width:28px;height:28px;margin-right:10px}
-.service{display:flex;justify-content:space-between;align-items:center;background:#f9f9f9;border-radius:12px;padding:12px 16px;margin:8px 0;box-shadow:0 2px 6px rgba(0,0,0,.1)}
-.service span{font-size:1em;font-weight:500;color:#333}
-button{background:#0b84ff;color:#fff;border:none;border-radius:12px;padding:8px 14px;cursor:pointer;font-weight:600;transition:background .2s}
-button:hover{background:#0969c7}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;justify-content:center;align-items:center;z-index:1000}
-.modal-content{background:#fff;border-radius:16px;padding:20px;max-width:400px;width:90%;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.3);display:flex;flex-direction:column;align-items:center}
-.modal-content h2{margin-top:0;font-size:1.5em;color:#222}
-.input-field{margin:12px 0;text-align:center;width:100%}
-.input-field label{display:block;margin-bottom:6px;font-size:.9em;color:#444}
-.input-field input{width:80%;padding:10px;border-radius:10px;border:1px solid #ccc;text-align:left;margin-bottom:8px}
-.qr-code{margin:50px 0;display:flex;justify-content:center;width:100%}
-.close-btn{margin-top:15px;background:#ccc;color:#333}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 20px;border-radius:20px;display:none}
-.payment-logos img{margin:0 5px;vertical-align:middle}
-.big-btn{background:#28a745;padding:12px 20px;font-size:1.2em;border:none;border-radius:12px;color:#fff;margin:10px 0;cursor:pointer;transition:background .2s}
-.big-btn:hover{background:#218838}
-#qrExpiredMsg{font-weight:bold;color:#f00;margin:10px 0;}
-#reloadQRBtn{background:#0b84ff;color:#fff;padding:10px 18px;border:none;border-radius:12px;cursor:pointer;margin:10px 0;transition:background .2s}
-#reloadQRBtn:hover{background:#0969c7}
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  min-height: 100vh;
+  margin: 0;
+  color: #fff;
+}
+
+/* Heading */
+h1 {
+  text-align: center;
+  padding: 25px 10px;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #38bdf8, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glass Cards */
+.platform-box {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 480px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: transform 0.3s ease;
+}
+
+.platform-box:hover {
+  transform: translateY(-5px);
+}
+
+/* Platform Title */
+.platform-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.4em;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #e2e8f0;
+}
+
+.platform-title img {
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+}
+
+/* Service Items */
+.service {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 10px 0;
+  transition: all 0.2s ease;
+}
+
+.service:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.service span {
+  font-size: 0.95em;
+  color: #e5e7eb;
+}
+
+/* Buttons */
+button {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+}
+
+/* Big Button */
+.big-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  padding: 12px 20px;
+  font-size: 1.1em;
+  border-radius: 12px;
+}
+
+.big-btn:hover {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+/* Modals */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #1e293b;
+  border-radius: 16px;
+  padding: 25px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Input Fields */
+.input-field input {
+  width: 85%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: #0f172a;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #22c55e;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: none;
+}
+
+/* QR Section */
+.qr-code canvas {
+  border-radius: 12px;
+  background: white;
+  padding: 10px;
+}
+
+/* Countdown */
+#countdown {
+  color: #f87171;
+  font-weight: bold;
+}
+
+/* Reload Button */
+#reloadQRBtn {
+  background: #3b82f6;
+  border-radius: 10px;
+}
+
+#reloadQRBtn:hover {
+  background: #2563eb;
+}
 </style>
 </head>
 <body>
